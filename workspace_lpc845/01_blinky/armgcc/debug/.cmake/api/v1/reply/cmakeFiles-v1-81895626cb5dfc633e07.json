@@ -1,0 +1,226 @@
+{
+	"inputs" : 
+	[
+		{
+			"path" : "CMakeLists.txt"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "debug/CMakeFiles/3.28.0-rc3/CMakeSystem.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/tools/cmake_toolchain_files/armgcc.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/tools/cmake_toolchain_files/mcux_config.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "debug/CMakeFiles/3.28.0-rc3/CMakeCCompiler.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "debug/CMakeFiles/3.28.0-rc3/CMakeCXXCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeGenericSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/Platform/Generic.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeCInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/Platform/Generic.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeCXXInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/Platform/Generic.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "debug/CMakeFiles/3.28.0-rc3/CMakeASMCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/CMakeASMInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/Compiler/GNU-ASM.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/CMake/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"path" : "flags.cmake"
+		},
+		{
+			"path" : "config.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/all_lib_device.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/CMSIS/Core/Include/CMSIS_Include_core_cm.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/components/uart/component_miniusart_adapter.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/device_CMSIS.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/device_startup.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/device_system.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_clock.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_common.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_inputmux.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_inputmux_connections.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_lpc_gpio.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_lpc_iocon_lite.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_lpc_miniusart.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_power.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_reset.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_swm.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_swm_connections.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_syscon.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/drivers/driver_syscon_connections.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/utilities/utilities_misc_utilities.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/utilities/debug_console_lite/utility_assert_lite.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/utilities/utility_debug_console_lite.LPC845.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/sdks/01_blinky_sdk/devices/LPC845/utilities/utility_str.LPC845.cmake"
+		}
+	],
+	"kind" : "cmakeFiles",
+	"paths" : 
+	{
+		"build" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/01_blinky/armgcc/debug",
+		"source" : "C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/01_blinky/armgcc"
+	},
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}
