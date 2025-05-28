@@ -1,0 +1,26 @@
+# ninja log v6
+23	1501	7701449912712669	CMakeFiles/new_project.elf.dir/C_/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/02_systick_blinky/main.c.obj	d34fc4b0d66a60fa
+68	1697	7701449913183931	CMakeFiles/new_project.elf.dir/C_/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/02_systick_blinky/peripherals.c.obj	32277b5653ea0253
+133	1884	7701449913809227	CMakeFiles/new_project.elf.dir/C_/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/02_systick_blinky/pin_mux.c.obj	8eb58e46a87c7f7d
+1505	3432	7701449927653965	CMakeFiles/new_project.elf.dir/C_/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/02_systick_blinky/board.c.obj	972fcade30651516
+1697	3632	7701449929488498	CMakeFiles/new_project.elf.dir/C_/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/02_systick_blinky/clock_config.c.obj	f9d031c8540dc00a
+1885	4112	7701449931388192	CMakeFiles/new_project.elf.dir/C_/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/02_systick_blinky/hardware_init.c.obj	40133d131a8c23d1
+3632	5759	7701449948873577	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/gcc/startup_LPC845.S.obj	b0ff3aea5365bec9
+3433	6396	7701449946874002	CMakeFiles/new_project.elf.dir/aab16d7c68e2680f2826f65fede69547/sdks/02_systick_blinky_sdk/components/uart/fsl_adapter_miniusart.c.obj	bc1dfd9ef07681f6
+4113	7408	7701449953746337	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/system_LPC845.c.obj	49711fa78c996969
+6397	10107	7701449976583787	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_common.c.obj	9e21a7a10ac9d2d0
+5759	10451	7701449970198139	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_clock.c.obj	c023ea4e7dbe9a35
+7408	11200	7701449986599796	CMakeFiles/new_project.elf.dir/aab16d7c68e2680f2826f65fede69547/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_common_arm.c.obj	ddadd4659ff85595
+10451	14114	7701450017068506	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_adc.c.obj	f002dde3c3f05b30
+10107	14354	7701450013609205	CMakeFiles/new_project.elf.dir/aab16d7c68e2680f2826f65fede69547/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_inputmux.c.obj	779208bf3aca0576
+11201	14379	7701450024558296	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_gpio.c.obj	77726848540265a6
+14354	17104	7701450056119479	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_power.c.obj	35ef7bb7f9e4c5a
+14380	17608	7701450056275761	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_reset.c.obj	e38a29011d08c67d
+14115	18089	7701450053743480	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_usart.c.obj	bb66e7f96c9d94e6
+17609	20732	7701450088592912	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_syscon.c.obj	badafe9650638a4a
+17105	20792	7701450083593547	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/drivers/fsl_swm.c.obj	881e887a10d40caf
+18090	20938	7701450093515972	CMakeFiles/new_project.elf.dir/aab16d7c68e2680f2826f65fede69547/sdks/02_systick_blinky_sdk/devices/LPC845/utilities/fsl_syscall_stub.c.obj	6c2cf3906443a4e1
+20733	22839	7701450119799828	CMakeFiles/new_project.elf.dir/48a823a1fcc432dc04b68ae57a773b23/workspace_lpc845/sdks/02_systick_blinky_sdk/devices/LPC845/utilities/fsl_sbrk.c.obj	28c10cf4ad742f77
+20793	23235	7701450120448582	CMakeFiles/new_project.elf.dir/fc3d867dd78a25dcd36d2ad3a2df8c56/02_systick_blinky_sdk/devices/LPC845/utilities/debug_console_lite/fsl_assert.c.obj	4d3b6286be8c2dd7
+20939	23237	7701450122016791	CMakeFiles/new_project.elf.dir/7f9d4069239a2e08e59d673890f61222/devices/LPC845/utilities/debug_console_lite/fsl_debug_console.c.obj	1a4e64cbd03d545a
+22840	25775	7701450140934935	CMakeFiles/new_project.elf.dir/aab16d7c68e2680f2826f65fede69547/sdks/02_systick_blinky_sdk/devices/LPC845/utilities/str/fsl_str.c.obj	a7bec89ec463d32
