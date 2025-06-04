@@ -1,6 +1,6 @@
 #include "board.h"
 
-#define LED_Blue  GPIO,1,1
+#define LED_Blue  GPIO 1,1
 #define delay(t)  for (unsigned int i = 0; i < t; i++);
 
 int main (void) {
