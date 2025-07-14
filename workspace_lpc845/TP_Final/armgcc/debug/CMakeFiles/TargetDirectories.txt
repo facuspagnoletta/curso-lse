@@ -1,3 +1,0 @@
-C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/TP_Final/armgcc/debug/CMakeFiles/new_project.elf.dir
-C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/TP_Final/armgcc/debug/CMakeFiles/edit_cache.dir
-C:/Users/amspa/OneDrive/Documentos/GitHub/curso-lse/workspace_lpc845/TP_Final/armgcc/debug/CMakeFiles/rebuild_cache.dir
