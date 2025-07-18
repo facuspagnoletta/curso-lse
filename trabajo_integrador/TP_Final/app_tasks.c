@@ -1,230 +1,269 @@
+#include "app_tasks.h" 
+#include "fsl_debug_console.h" 
 
-#include "app_tasks.h"
+// Colas y Semáforos 
+QueueHandle_t queue_adc;
+QueueHandle_t queue_display;
+QueueHandle_t queue_display_variable;
+QueueHandle_t queue_lux;
+QueueHandle_t queue_lux_data;
+QueueHandle_t queue_setpoint;
 
-// Cola para datos del ADC
-xQueueHandle queue_adc;
-// Cola para datos del display
-xQueueHandle queue_display;
-// Cola para selecion de valor para el display
-xQueueHandle queue_display_variable;
-// Cola para datos de luminosidad
-xQueueHandle queue_lux;
-// cola para datos de lux, pero en crudo
-xQueueHandle queue_lux_data;
-
-// Semáforo para interrupción del infrarojo
 xSemaphoreHandle semphr_buzz;
-// Semáforo para interrupción del user button
 xSemaphoreHandle semphr_usr;
+xSemaphoreHandle semphr_mutex;
 
-// es un Handler para la tarea de display 
-TaskHandle_t handle_display;
+TaskHandle_t handle_tricolor;
 
-/**
- * Iniciamos los periféricos
- */
+// Tarea 1: Iniciar de periféricos y recursos
 void task_init(void *params) {
-	// Inicio semáforos
-	semphr_buzz = xSemaphoreCreateBinary();
-	semphr_usr = xSemaphoreCreateBinary();
-	semphr_touch = xSemaphoreCreateBinary();
-	semphr_counter = xSemaphoreCreateCounting(99, 30);
-	semphr_mutex = xSemaphoreCreateMutex();
+    semphr_usr = xSemaphoreCreateBinary();
+    semphr_mutex = xSemaphoreCreateMutex();
+    
+    queue_display = xQueueCreate(1, sizeof(uint16_t));
+    queue_adc = xQueueCreate(1, sizeof(adc_data_t));
+    queue_display_variable = xQueueCreate(1, sizeof(display_variable_t));
+    queue_lux = xQueueCreate(1, sizeof(float));
+    queue_lux_data = xQueueCreate(1, sizeof(uint16_t));
+    queue_setpoint = xQueueCreate(1, sizeof(float));
 
-	// Inicio colas
-	queue_adc = xQueueCreate(1, sizeof(adc_data_t));
-	queue_display_variable = xQueueCreate(1, sizeof(display_variable_t));
-	queue_lux = xQueueCreate(1, sizeof(uint16_t));
-	queue_display = xQueueCreate(1, sizeof(uint16_t));
-	
-	// Inicializacion de GPIO
-	wrapper_gpio_init(0);
-	wrapper_gpio_init(1);
-	// Inicialización del LED
-	wrapper_output_init((gpio_t){LED}, true);
-	// Inicialización del buzzer
-	wrapper_output_init((gpio_t){BUZZER}, false);
-	// Inicialización del enable del CNY70
-	wrapper_output_init((gpio_t){CNY70_EN}, true);
-	// Configuro el ADC
-	wrapper_adc_init();
-	// Configuro el display
-	wrapper_display_init();
-	// Configuro botones
-	wrapper_btn_init();
-	// Configuro interrupción por flancos para el infrarojo y para el botón del user
-	wrapper_gpio_enable_irq((gpio_t){CNY70}, kPINT_PinIntEnableBothEdges, cny70_callback);
-	wrapper_gpio_enable_irq((gpio_t){USR_BTN}, kPINT_PinIntEnableFallEdge, usr_callback);
-	// Inicializo el PWM
-	wrapper_pwm_init();
-	// Inicializo I2C y Bh1750
-	wrapper_i2c_init();
-	wrapper_bh1750_init();
-	// Inicializo el pulsador capacitivo
-	wrapper_touch_init();
+    // Incialización de GPIO
+    wrapper_gpio_init(0);
+    wrapper_gpio_init(1);
+    // Inicialización del LED
+    wrapper_output_init((gpio_t){LED}, true);
+    // Inicialización del buzzer
+    wrapper_output_init((gpio_t){BUZZER}, false);
+    // Inicialización del enable del CNY70
+    wrapper_output_init((gpio_t){CNY70_EN}, true);
+    // Configuro el ADC
+    wrapper_adc_init();
+    // Configuro el display
+    wrapper_display_init();
+    // Configuro botones
+    wrapper_btn_init();
+    // wrapper_gpio_enable_irq((gpio_t){CNY70}, kPINT_PinIntEnableBothEdges, cny70_callback);
+    wrapper_gpio_enable_irq((gpio_t){USR_BTN}, kPINT_PinIntEnableFallEdge, usr_callback);
+    // Inicializo el PWM
+    wrapper_pwm_init();
+    // Inicializo I2C
+    wrapper_i2c_init();
+    // Inicializo el BH1750
+    wrapper_bh1750_
+    
+\\
 
-	// Elimino tarea para liberar recursos
-	vTaskDelete(NULL);
+
+\
+init();
+
+    vTaskDelete(NULL);
 }
 
-/**
- * Tarea del ADC (1)
- */
+// Tarea 2: ADC
 void task_adc(void *params) {
-
-	while(1) {
-		// Inicio una conversion
-		ADC_DoSoftwareTriggerConvSeqA(ADC0);
-		// Bloqueo la tarea por 250 ms
-		vTaskDelay(pdMS_TO_TICKS(250));
-	}
-}
-
-/**
- * Tarea Control del display (2)
- */
-void task_display_change(void *params) {
-	// Dato para pasar
-	display_variable_t variable = kDISPLAY_TEMP;
-
-	while(1) {
-		// Escribe el dato en la cola
-		xQueueOverwrite(queue_display_variable, &variable);
-		// Intenta tomar el semáforo
-		xSemaphoreTake(semphr_usr, portMAX_DELAY);
-		// Si se presionó, cambio la variable
-		variable = (variable == kDISPLAY_TEMP)? kDISPLAY_REF : kDISPLAY_TEMP;
-	}
-}
-
-/**
- *  Tarea Escribir en el display (3)
- */
-void task_control(void *params) {
-	// Variable a mostrar
-	display_variable_t variable = kDISPLAY_TEMP;
-	// Valores de ADC
-	adc_data_t data = {0};
-	// Valor a mostrar
-	uint16_t val = 0;
-
-	while(1) {
-		// Veo que variable hay que mostrar
-		xQueuePeek(queue_display_variable, &variable, portMAX_DELAY);
-		// Leo los datos del ADC
-		xQueuePeek(queue_adc, &data, portMAX_DELAY);
-		// Veo cual tengo que mostrar
-		val = (variable == kDISPLAY_TEMP)? data.temp_raw : data.ref_raw;
-		val = 30 * val / 4095;
-		// Escribo en la cola del display si puedo tomar el mutex
-		xSemaphoreTake(semphr_mutex, portMAX_DELAY);
-		xQueueOverwrite(queue_display, &val);
-		xSemaphoreGive(semphr_mutex);
-
-		vTaskDelay(pdMS_TO_TICKS(50));
-	}
-}
-
-/**
- *  Tarea Número en el display (4)
- */
-void task_display(void *params) {
-	// Variable con el dato para escribir
-	uint8_t data;
-
-	while(1) {
-		// Mira el dato que haya en la cola
-		if(!xQueuePeek(queue_display, &data, pdMS_TO_TICKS(100))) { continue; }
-		// Muestro el número
-		wrapper_display_off();
-		wrapper_display_write((uint8_t)(data / 10));
-		wrapper_display_on((gpio_t){COM_1});
-		vTaskDelay(pdMS_TO_TICKS(10));
-		wrapper_display_off();
-		wrapper_display_write((uint8_t)(data % 10));
-		wrapper_display_on((gpio_t){COM_2});
-		vTaskDelay(pdMS_TO_TICKS(10));
-	}
-}
-
-
-/**
- *  Tarea LED Azul y RV22 (5)
- */
-void task_blinky(void *params) {
-	// Variable para guardar el tiempo en ms de bloqueo
-	uint16_t blocking_time;
-
-	while(1) {
-		// Lee el último valor de luminosidad
-		xQueuePeek(queue_lux, &blocking_time, portMAX_DELAY);
-		// Máximo es aprox 30000 entonces 3000 ms como máximo
-		blocking_time /= 10;
-		// Conmuto salida
-		wrapper_output_toggle((gpio_t){LED});
-		// Bloqueo el tiempo que se indique de la cola
-		vTaskDelay(pdMS_TO_TICKS(blocking_time));
-	}
-}
-
-/**
- *  Tarea para Buzzer (6)
- */
-void task_buzzer(void *params) {
-
-	while(1) {
-		// Intenta tomar el semáforo
-		xSemaphoreTake(semphr_buzz, portMAX_DELAY);
-		// Conmuto el buzzer
-		wrapper_output_toggle((gpio_t){BUZZER});
-	}
-}
-
-/**
- *  Tarea para BH1750 (7)
- */
-void task_BH1750(void *params) {
-    //Parámetros de luminosidad
-    uint16_t lux = 0 ;
-    float lux_p = 0;
-
-    while (1){
-        // Bloqueo
-        vTaskDelay(pdMS_TO_TICKS(200));
-
-        // Leo el valor de lux
-        lux = wrapper_bh1750_read();
-        if (lux > 30000)
-            lux = 30000;
-
-        lux_p = (lux / 30000.0f) * 100.0f;
-
-        // Muestrar en la consola
-        xQueueOverwrite(queue_lux, &lux_pct);
-        xQueueOverwrite(queue_lux_raw, &lux);
+    while (1) {
+        ADC_DoSoftwareTriggerConvSeqA(ADC0);
+        vTaskDelay(pdMS_TO_TICKS(250));
     }
 }
 
-/**
- *  Tarea para Buzzer (8)
- */
-void task_buzzer(void *params) {
-
-	while(1) {
-		// Intenta tomar el semáforo
-		xSemaphoreTake(semphr_buzz, portMAX_DELAY);
-		// Conmuto el buzzer
-		wrapper_output_toggle((gpio_t){BUZZER});
-	}
+// Tarea 3: Control del botón de usuario
+void task_display_change(void *params) {
+    display_variable_t variable = kDISPLAY_LUX;
+    while (1) {
+        xQueueOverwrite(queue_display_variable, &variable);
+        xSemaphoreTake(semphr_usr, portMAX_DELAY);
+        variable = (variable == kDISPLAY_LUX) ? kDISPLAY_SETPOINT : kDISPLAY_LUX;
+    }
 }
 
-/**
- *  Tarea Setpoint (9)
- */
+// Tarea 4: Controla qué dato se envía al display
+void task_control(void *params) {
+    display_variable_t variable_actual = kDISPLAY_LUX;
+    float lux_percent = 0;
+    float current_setpoint = 0;
+    uint16_t val = 0;
 
-/**
- *  Tarea Tricolor (10)
- */
-/**
- *  Tarea Monitoreo (11)
- */
+    while (1) {
+        xQueuePeek(queue_display_variable, &variable_actual, portMAX_DELAY);
+
+        if (variable_actual == kDISPLAY_LUX) {
+            xQueuePeek(queue_lux, &lux_percent, portMAX_DELAY);
+            val = (uint16_t)lux_percent;
+        } else { 
+            xQueuePeek(queue_setpoint, &current_setpoint, portMAX_DELAY);
+            val = (uint16_t)current_setpoint;
+        }
+
+        if (val > 99) {
+            val = 99;
+        }
+        
+        xQueueOverwrite(queue_display, &val);
+        vTaskDelay(pdMS_TO_TICKS(50));
+    }
+}
+
+// Tarea 5: Escribe un número en el display 
+
+void task_display(void *params) {
+    uint16_t data_to_write;
+    display_variable_t variable_actual;
+    while (1) {
+        if (!xQueuePeek(queue_display, &data_to_write, pdMS_TO_TICKS(100))) {
+            continue;
+        }
+        xQueuePeek(queue_display_variable, &variable_actual, 0);
+
+        wrapper_display_off();
+        wrapper_display_write((uint8_t)(data_to_write / 10));
+        wrapper_display_on((gpio_t){COM_1});
+        vTaskDelay(pdMS_TO_TICKS(10));
+
+        wrapper_display_off();
+        wrapper_display_write((uint8_t)(data_to_write % 10));
+        wrapper_display_on((gpio_t){COM_2});
+        
+        // Muestra el punto decimal si corresponde
+        if (variable_actual == kDISPLAY_SETPOINT) {
+        
+            wrapper_display_segment_on((gpio_t){SEG_DP});
+        } else {
+            wrapper_display_segment_off((gpio_t){SEG_DP});
+        }
+        
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+}
+
+// Tarea 6: Control de LED Azul con RV22 
+
+void task_Led_Azul_rv22(void *params) {
+    adc_data_t adc_data;
+    int16_t manual_duty = 0;
+
+    while (1) {
+        xQueuePeek(queue_adc, &adc_data, portMAX_DELAY);
+        
+        manual_duty = (adc_data.temp_raw * 100) / 4095;
+
+        wrapper_pwm_update_led_azul(manual_duty);
+
+        vTaskDelay(pdMS_TO_TICKS(50));
+    }
+}
+
+// Tarea 7: Sensor BH1750
+
+void task_bh1750(void *params) {
+    uint16_t lux_raw_value = 0;
+    float lux_por = 0;
+    while (1) {
+        vTaskDelay(pdMS_TO_TICKS(200));
+        lux_raw_value = wrapper_bh1750_read();
+        if (lux_raw_value > 30000) lux_raw_value = 30000;
+        lux_por = (float)lux_raw_value * 100.0f / 30000.0f;
+        xQueueOverwrite(queue_lux, &lux_por);
+        xQueueOverwrite(queue_lux_data, &lux_raw_value);
+    }
+}
+
+// Tarea 8: Buzzer
+
+// void task_buzzer(void *params) {
+//     while (1) 
+//     {
+//         xSemaphoreTake(semphr_buzz, portMAX_DELAY);
+//         // Enciende el buzzer
+//         wrapper_output_toggle((gpio_t){BUZZER});
+//     }
+        
+// }
+
+// Tarea 9: Setpoint
+
+void task_setpoint(void *params) {
+    float current_setpoint = 25.0f;
+    while (1) {
+        if (wrapper_btn_get_with_debouncing_with_pull_up((gpio_t){S1_BTN})) {
+            if (current_setpoint < 75.0f) current_setpoint += 1.0f;
+            while (wrapper_btn_get((gpio_t){S1_BTN})) vTaskDelay(pdMS_TO_TICKS(10));
+        }
+        if (wrapper_btn_get_with_debouncing_with_pull_up((gpio_t){S2_BTN})) {
+            if (current_setpoint > 25.0f) current_setpoint -= 1.0f;
+            while (wrapper_btn_get((gpio_t){S2_BTN})) vTaskDelay(pdMS_TO_TICKS(10));
+        }
+        xQueueOverwrite(queue_setpoint, &current_setpoint);
+        vTaskDelay(pdMS_TO_TICKS(50));
+    }
+}
+
+// Tarea 10: LEDs tricolor 
+
+void task_tricolor(void *params) {
+    float lux_percent = 0;
+    float current_setpoint = 0;
+    int16_t error = 0;
+    const float DEADZONE = 1.0f;
+
+    while (1) {
+        xQueuePeek(queue_lux, &lux_percent, portMAX_DELAY);
+        xQueuePeek(queue_setpoint, &current_setpoint, portMAX_DELAY);
+        
+        error = lux_percent - current_setpoint;
+
+        if (error > DEADZONE) {
+            wrapper_pwm_update_rled(error);
+            wrapper_pwm_update_bled(0);
+        } else if (error < -DEADZONE) {
+            wrapper_pwm_update_bled(-error);
+            wrapper_pwm_update_rled(0);
+        } else {
+            wrapper_pwm_update_rled(0);
+            wrapper_pwm_update_bled(0);
+        }
+        vTaskDelay(pdMS_TO_TICKS(50));
+    }
+}
+
+// Tarea 11: Monitor de consola
+
+void task_monitoreo(void *params) {
+//     float lux_percent = 0;
+//     float current_setpoint = 0;
+//     uint32_t elapsed_time_ms = 0;
+//     while (1) {
+//         xQueuePeek(queue_lux, &lux_percent, 0);
+//         xQueuePeek(queue_setpoint, &current_setpoint, 0);
+        
+//         elapsed_time_ms = xTaskGetTickCount() * portTICK_PERIOD_MS;
+        
+//         PRINTF("Tiempo: %lu ms | Lux: %.1f%% | Setpoint: %.1f%%\r\n", elapsed_time_ms, lux_percent, current_setpoint);
+        
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    // }
+}
+
+void task_cny70(void *params) {
+
+
+	while(1){
+		
+		if(!GPIO_PinRead(CNY70)) {
+			vTaskDelay(pdMS_TO_TICKS(50));
+			if(GPIO_PinRead(CNY70)) {
+				// Flanco ascendente
+				wrapper_output_toggle((gpio_t){BUZZER});
+			}
+		} else {
+			vTaskDelay(pdMS_TO_TICKS(50));
+			if(!GPIO_PinRead(CNY70)) {
+				// Flanco descendente
+				wrapper_output_toggle((gpio_t){BUZZER});
+			}
+		}
+
+		vTaskDelay(pdMS_TO_TICKS(1));
+	}
+}

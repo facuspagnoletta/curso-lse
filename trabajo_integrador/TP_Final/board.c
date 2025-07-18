@@ -30,7 +30,7 @@ status_t BOARD_InitDebugConsole(void)
     CLOCK_Select(BOARD_DEBUG_USART_CLK_ATTACH);
     RESET_PeripheralReset(BOARD_DEBUG_USART_RST);
     result = DbgConsole_Init(BOARD_DEBUG_USART_INSTANCE, BOARD_DEBUG_USART_BAUDRATE, BOARD_DEBUG_USART_TYPE,
-                            BOARD_DEBUG_USART_CLK_FREQ);
+                             BOARD_DEBUG_USART_CLK_FREQ);
     assert(kStatus_Success == result);
     return result;
 #else

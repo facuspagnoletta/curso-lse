@@ -1,0 +1,6 @@
+/Users/faculedesma/Documents/GitHub/curso-lse/trabajo_integrador/tp_final/armgcc/debug/CMakeFiles/new_project.elf.dir
+/Users/faculedesma/Documents/GitHub/curso-lse/trabajo_integrador/tp_final/armgcc/debug/CMakeFiles/edit_cache.dir
+/Users/faculedesma/Documents/GitHub/curso-lse/trabajo_integrador/tp_final/armgcc/debug/CMakeFiles/rebuild_cache.dir
+/Users/faculedesma/Documents/GitHub/curso-lse/trabajo_integrador/tp_final/armgcc/debug/freertos/CMakeFiles/freertos.dir
+/Users/faculedesma/Documents/GitHub/curso-lse/trabajo_integrador/tp_final/armgcc/debug/freertos/CMakeFiles/edit_cache.dir
+/Users/faculedesma/Documents/GitHub/curso-lse/trabajo_integrador/tp_final/armgcc/debug/freertos/CMakeFiles/rebuild_cache.dir

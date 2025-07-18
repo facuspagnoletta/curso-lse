@@ -3,7 +3,7 @@ IF(NOT DEFINED FPU)
 ENDIF()  
 
 IF(NOT DEFINED SPECS)  
-    SET(SPECS "--specs=nosys.specs")  
+    SET(SPECS "--specs=nano.specs --specs=nosys.specs")  
 ENDIF()  
 
 IF(NOT DEFINED DEBUG_CONSOLE_CONFIG)  
@@ -15,6 +15,7 @@ SET(CMAKE_ASM_FLAGS_DEBUG " \
     -D__STARTUP_CLEAR_BSS \
     -DMCUXPRESSO_SDK \
     -DCPU_LPC845M301JBD48 \
+    -DLPC845_SERIES \
     -g \
     -mthumb \
     -mcpu=cortex-m0plus \
@@ -25,6 +26,7 @@ SET(CMAKE_ASM_FLAGS_RELEASE " \
     -D__STARTUP_CLEAR_BSS \
     -DMCUXPRESSO_SDK \
     -DCPU_LPC845M301JBD48 \
+    -DLPC845_SERIES \
     -mthumb \
     -mcpu=cortex-m0plus \
     ${FPU} \
@@ -33,12 +35,13 @@ SET(CMAKE_C_FLAGS_DEBUG " \
     ${CMAKE_C_FLAGS_DEBUG} \
     -include ${ProjDirPath}/../mcux_config.h \
     -DDEBUG \
+    -D__STARTUP_CLEAR_BSS \
     -DMCUX_META_BUILD \
     -DMCUXPRESSO_SDK \
     -DCPU_LPC845M301JBD48 \
+    -DLPC845_SERIES \
     -g \
     -O0 \
-    --specs=nano.specs \
     -Wall \
     -fno-common \
     -ffunction-sections \
@@ -55,11 +58,12 @@ SET(CMAKE_C_FLAGS_RELEASE " \
     ${CMAKE_C_FLAGS_RELEASE} \
     -include ${ProjDirPath}/../mcux_config.h \
     -DNDEBUG \
+    -D__STARTUP_CLEAR_BSS \
     -DMCUX_META_BUILD \
     -DMCUXPRESSO_SDK \
     -DCPU_LPC845M301JBD48 \
+    -DLPC845_SERIES \
     -Os \
-    --specs=nano.specs \
     -Wall \
     -fno-common \
     -ffunction-sections \
@@ -78,9 +82,9 @@ SET(CMAKE_CXX_FLAGS_DEBUG " \
     -DMCUX_META_BUILD \
     -DMCUXPRESSO_SDK \
     -DCPU_LPC845M301JBD48 \
+    -DLPC845_SERIES \
     -g \
     -O0 \
-    --specs=nano.specs \
     -Wall \
     -fno-common \
     -ffunction-sections \
@@ -100,8 +104,8 @@ SET(CMAKE_CXX_FLAGS_RELEASE " \
     -DMCUX_META_BUILD \
     -DMCUXPRESSO_SDK \
     -DCPU_LPC845M301JBD48 \
+    -DLPC845_SERIES \
     -Os \
-    --specs=nano.specs \
     -Wall \
     -fno-common \
     -ffunction-sections \
@@ -154,5 +158,3 @@ SET(CMAKE_EXE_LINKER_FLAGS_RELEASE " \
     ${SPECS} \
     -T\"${ProjDirPath}/LPC845_flash.ld\" -static \
 ")
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fno-use-linker-plugin")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -fno-use-linker-plugin")

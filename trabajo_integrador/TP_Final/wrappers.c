@@ -1,6 +1,7 @@
 #include "wrappers.h"
 
 // Variable privada para registrar el evento del PWM
+static uint32_t pwm_led_event = 0;
 static uint32_t pwm_bled_event = 0, pwm_rled_event = 0;
 
 /**
@@ -66,16 +67,21 @@ void wrapper_btn_init(void) {
  * @param gpio estructura de GPIO
  * @param edge kPINT_PinIntEnableRiseEdge, kPINT_PinIntEnableFallEdge, kPINT_PinIntEnableBothEdges
  */
-void wrapper_gpio_enable_irq(gpio_t gpio, pint_pin_enable_t edge, pint_cb_t callback) {
-	// Variable para guardar el numero de interrupción
-	static uint32_t pint_n = 0;
-	// Solo la primera vez que se configura la interrupción
-	if(pint_n == 0) { PINT_Init(PINT); }
-	// Asigno el pin a la interrupción
-	SYSCON->PINTSEL[pint_n] = wrapper_gpio_get_pin(gpio);
-	// PINT interrupt para el flanco indicado
-	PINT_PinInterruptConfig(PINT, (pint_pin_int_t)pint_n, edge, callback);
-	PINT_EnableCallbackByIndex(PINT, (pint_pin_int_t)pint_n++);
+void wrapper_gpio_enable_irq(gpio_t gpio, pint_pin_enable_t edge, pint_cb_t callback)
+{
+    // Variable para guardar el numero de interrupción
+    static uint32_t pint_n = 0;
+    // Solo la primera vez que se configura la interrupción
+    if (pint_n == 0)
+    {
+        PINT_Init(PINT);
+    }
+    // Asigno el pin a la interrupción
+    SYSCON->PINTSEL[pint_n] = wrapper_gpio_get_pin(gpio);
+    // PINT interrupt para el flanco indicado
+    PINT_PinInterruptConfig(PINT, (pint_pin_int_t)pint_n, edge);
+	PINT_SetCallback(PINT, callback);
+    PINT_EnableCallbackByIndex(PINT, (pint_pin_int_t)pint_n++);
 }
 
 /**
@@ -114,7 +120,8 @@ void wrapper_pwm_init(void) {
 	// Conecto la salida 4 del SCT al LED azul
     CLOCK_EnableClock(kCLOCK_Swm);
     SWM_SetMovablePinSelect(SWM0, kSWM_SCT_OUT0, kSWM_PortPin_P1_0 + wrapper_gpio_get_pin((gpio_t){BLED}));
-		SWM_SetMovablePinSelect(SWM0, kSWM_SCT_OUT1, kSWM_PortPin_P1_0 + wrapper_gpio_get_pin((gpio_t){RLED}));
+	SWM_SetMovablePinSelect(SWM0, kSWM_SCT_OUT1, kSWM_PortPin_P1_0 + wrapper_gpio_get_pin((gpio_t){RLED}));
+	SWM_SetMovablePinSelect(SWM0, kSWM_SCT_OUT4, kSWM_PortPin_P0_0 + wrapper_gpio_get_pin((gpio_t){LED}));
     CLOCK_DisableClock(kCLOCK_Swm);
 
     // Eligo el clock para el Timer
@@ -157,6 +164,23 @@ void wrapper_pwm_init(void) {
 			sctimer_clock,
 			&pwm_rled_event
 		);
+	
+		// Configuro el PWM del LED adicional
+    sctimer_pwm_signal_param_t led_pwm_config = {
+        .output = kSCTIMER_Out_4,  // Salida del Timer
+        .level = kSCTIMER_LowTrue, // Logica negativa
+        .dutyCyclePercent = 0      // Apagado
+    };
+
+    // Inicializo el PWM del LED adicional
+    SCTIMER_SetupPwm(
+        SCT0,
+        &led_pwm_config,
+        kSCTIMER_CenterAlignedPwm,
+        1000,
+        sctimer_clock,
+        &pwm_led_event);
+
 
     // Inicializo el Timer
     SCTIMER_StartTimer(SCT0, kSCTIMER_Counter_U);
@@ -190,6 +214,11 @@ void wrapper_pwm_update_bled(int16_t duty) {
 void wrapper_pwm_update_rled(int16_t duty) {
 	// Invoco al wrapper general
 	wrapper_pwm_update_led(kSCTIMER_Out_1, duty, pwm_rled_event);
+}
+
+void wrapper_pwm_update_led_azul(int16_t duty)
+{
+    wrapper_pwm_update_led(kSCTIMER_Out_4, duty, pwm_led_event);
 }
 
 /**
@@ -241,47 +270,3 @@ float wrapper_bh1750_read(void) {
 	// Devuelvo el resultado
 	return ((res[0] << 8) + res[1]) / 1.2;
 }
-
-/**
- * @brief Wrapper que inicializa el pulsador capacitivo 
- */
-void wrapper_touch_init(void) {
-	// Habilita las funciones de táctil capacitivo en los pines
-	CLOCK_EnableClock(kCLOCK_Swm);
-	SWM_SetFixedPinSelect(SWM0, kSWM_CAPT_X0, true);
-	SWM_SetFixedPinSelect(SWM0, kSWM_CAPT_YH, true);
-	SWM_SetFixedPinSelect(SWM0, kSWM_CAPT_YL, true);
-	CLOCK_DisableClock(kCLOCK_Swm);
-
-	// Saca pull ups y pull downs
-	CLOCK_EnableClock(kCLOCK_Iocon);
-	IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO1_8, IOCON_CAPT_CONFIG);
-	IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO1_9, IOCON_CAPT_CONFIG);
-	IOCON_PinMuxSet(IOCON, IOCON_INDEX_PIO0_31, IOCON_CAPT_CONFIG);
-	CLOCK_DisableClock(kCLOCK_Iocon);
-
-	// Selecciona el clock de base
-	CLOCK_Select(kCAPT_Clk_From_Fro);
-	POWER_DisablePD(kPDRUNCFG_PD_ACMP);
-
-	// Inicialización básica del táctil agregando el pin X0
-	capt_config_t config;
-	CAPT_GetDefaultConfig(&config);
-	config.enableXpins = kCAPT_X0Pin;
-	CAPT_Init(CAPT, &config);
-	// Habilita interrupción luego de cada tanda de conversiones
-	CAPT_EnableInterrupts(CAPT, kCAPT_InterruptOfPollDoneEnable);
-	NVIC_EnableIRQ(CMP_CAPT_IRQn);
-	// Conversiones continuas
-	CAPT_SetPollMode(CAPT, kCAPT_PollContinuousMode);
-}
-
-/**
- * @brief Wrapper que obtiene si el táctil se presionó o no
- */
-bool wrapper_touch_is_touched(void) {
-	// Lee el valor del contador del táctil
-	capt_touch_data_t data;
-	CAPT_GetTouchData(CAPT, &data);
-	return data.count < 15;
-}|

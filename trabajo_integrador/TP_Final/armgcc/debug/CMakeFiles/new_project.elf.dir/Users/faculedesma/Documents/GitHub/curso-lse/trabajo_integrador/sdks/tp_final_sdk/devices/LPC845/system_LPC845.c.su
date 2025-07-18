@@ -1,0 +1,3 @@
+/Users/faculedesma/Documents/GitHub/curso-lse/trabajo_integrador/sdks/tp_final_sdk/devices/LPC845/system_LPC845.c:74:6:SystemInit	8	static
+/Users/faculedesma/Documents/GitHub/curso-lse/trabajo_integrador/sdks/tp_final_sdk/devices/LPC845/system_LPC845.c:91:6:SystemCoreClockUpdate	16	static
+/Users/faculedesma/Documents/GitHub/curso-lse/trabajo_integrador/sdks/tp_final_sdk/devices/LPC845/system_LPC845.c:179:29:SystemInitHook	8	static

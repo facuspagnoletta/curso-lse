@@ -9,13 +9,10 @@ SET (MCUXPRESSO_CMAKE_FORMAT_MINOR_VERSION 0)
 include(ide_overrides.cmake OPTIONAL)
 
 if(CMAKE_SCRIPT_MODE_FILE)
-    message("${MCUXPRESSO_CMAKE_FORMAT_MAJOR_VERSION}")
-    return()
+  message("${MCUXPRESSO_CMAKE_FORMAT_MAJOR_VERSION}")
+  return()
 endif()
 
-
-set(CMAKE_STATIC_LIBRARY_PREFIX)
-set(CMAKE_STATIC_LIBRARY_SUFFIX)
 
 set(CMAKE_EXECUTABLE_LIBRARY_PREFIX)
 set(CMAKE_EXECUTABLE_LIBRARY_SUFFIX)
@@ -56,6 +53,13 @@ add_executable(${MCUX_SDK_PROJECT_NAME}
 "${ProjDirPath}/../hardware_init.c"
 "${ProjDirPath}/../app.h"
 "${ProjDirPath}/../mcux_config.h"
+"${ProjDirPath}/../app_tasks.h"
+"${ProjDirPath}/../app_tasks.c"
+"${ProjDirPath}/../isr.c"
+"${ProjDirPath}/../isr.h"
+"${ProjDirPath}/../labels.h"
+"${ProjDirPath}/../wrappers.h"
+"${ProjDirPath}/../wrappers.c"
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
@@ -64,6 +68,7 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PRIVATE
 
 
 include(${SdkRootDirPath}/devices/LPC845/all_lib_device.cmake)
+add_subdirectory(${ProjDirPath}/../../freertos ${CMAKE_BINARY_DIR}/freertos)
 
 IF(NOT DEFINED TARGET_LINK_SYSTEM_LIBRARIES)  
     SET(TARGET_LINK_SYSTEM_LIBRARIES "-lm -lc -lgcc -lnosys")  
@@ -73,7 +78,7 @@ TARGET_LINK_LIBRARIES(${MCUX_SDK_PROJECT_NAME} PRIVATE -Wl,--start-group)
 
 target_link_libraries(${MCUX_SDK_PROJECT_NAME} PRIVATE ${TARGET_LINK_SYSTEM_LIBRARIES})
 
-TARGET_LINK_LIBRARIES(${MCUX_SDK_PROJECT_NAME} PRIVATE -Wl,--end-group)
+TARGET_LINK_LIBRARIES(${MCUX_SDK_PROJECT_NAME} PRIVATE freertos -Wl,--end-group)
 
 ADD_CUSTOM_COMMAND(TARGET ${MCUX_SDK_PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_OBJCOPY}
 -Obinary ${EXECUTABLE_OUTPUT_PATH}/${MCUX_SDK_PROJECT_NAME} ${EXECUTABLE_OUTPUT_PATH}/new_project.bin)

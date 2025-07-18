@@ -4,7 +4,7 @@
  * @brief Callback para interrupción por flancos del infrarojo
  * @param pintr numero de interrupción
  */
-void cny70_callback(pint_pin_int_t pintr, uint32_t pmatch_status) {
+void cny70_callback(pint_pin_int_t pintr, pint_status_t *pmatch_status) {
 	// Tarea de prioridad alta?
 	int32_t higher_task = 0;
 	// Doy el semáforo para la tarea
@@ -19,7 +19,7 @@ void cny70_callback(pint_pin_int_t pintr, uint32_t pmatch_status) {
  * @brief Callback para interrupción por flanco del botón de user
  * @param pintr numero de interrupción
  */
-void usr_callback(pint_pin_int_t pintr, uint32_t pmatch_status) {
+void usr_callback(pint_pin_int_t pintr, pint_status_t *pmatch_status) {
 	// Tarea de prioridad alta?
 	int32_t higher_task = 0;
 	// Doy el semáforo para la tarea
@@ -56,20 +56,4 @@ void ADC0_SEQA_IRQHandler(void) {
 		// Veo si hace falta un cambio de contexto
 		portYIELD_FROM_ISR(higher_task);
 	}
-}
-
-/**
- * @brief Handler para la interrupción del touch
- */
-void CMP_CAPT_IRQHandler(void) {
-	// Variable de cambio de contexto
-	int32_t higher_task = 0;
-	// Limpio interrupción
-	CAPT_ClearInterruptStatusFlags(CAPT, kCAPT_InterruptOfPollDoneStatusFlag);
-	// Doy el semáforo si se presionó el touch
-	if(wrapper_touch_is_touched()) {
-		xSemaphoreGiveFromISR(semphr_touch, &higher_task);
-	}
-	// Veo si hace falta un cambio de contexto
-	portYIELD_FROM_ISR(higher_task);
 }
